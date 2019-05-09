@@ -6793,6 +6793,11 @@ static int32_t qdsp_cvs_callback(struct apr_client_data *data, void *priv)
 
 		cvs_voc_pkt = v->shmem_info.sh_buf.buf[1].data;
 		if (cvs_voc_pkt != NULL &&  common.mvs_info.ul_cb != NULL) {
+			if (v->shmem_info.sh_buf.buf[1].size <
+			    ((3 * sizeof(uint32_t)) + cvs_voc_pkt[2])) {
+				pr_err("%s: invalid voc pkt size\n", __func__);
+				return -EINVAL;
+			}
 			/* cvs_voc_pkt[0] contains tx timestamp */
 			common.mvs_info.ul_cb((uint8_t *)&cvs_voc_pkt[3],
 					      cvs_voc_pkt[2],
@@ -7107,7 +7112,7 @@ static int32_t qdsp_cvp_callback(struct apr_client_data *data, void *priv)
 			}
 		}
 	} else if (data->opcode == VSS_ICOMMON_RSP_GET_PARAM ||
-		   VSS_ICOMMON_RSP_GET_PARAM_V3) {
+		   data->opcode == VSS_ICOMMON_RSP_GET_PARAM_V3) {
 		pr_debug("%s: VSS_ICOMMON_RSP_GET_PARAM\n", __func__);
 		ptr = data->payload;
 		if (ptr[0] != 0) {

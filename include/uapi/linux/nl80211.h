@@ -990,6 +990,11 @@
  *	indicated by %NL80211_ATTR_WIPHY_FREQ and other attributes
  *	determining the width and type.
  *
+ * @NL80211_CMD_UPDATE_OWE_INFO: This interface allows the host driver to
+ *	offload OWE processing to user space. This intends to support
+ *	OWE/Enhanced Open AKM by the host drivers that implemnt SME but rely
+ *	on the user space for the crypotographic/DH IE processing.
+ *
  * @NL80211_CMD_MAX: highest used command number
  * @__NL80211_CMD_AFTER_LAST: internal use
  */
@@ -1210,6 +1215,7 @@ enum nl80211_commands {
 
 	NL80211_CMD_NOTIFY_RADAR,
 
+	NL80211_CMD_UPDATE_OWE_INFO,
 	/* add new commands above here */
 
 	/* used to define NL80211_CMD_MAX below */
@@ -4044,11 +4050,15 @@ enum nl80211_txrate_gi {
  * @NL80211_BAND_2GHZ: 2.4 GHz ISM band
  * @NL80211_BAND_5GHZ: around 5 GHz band (4.9 - 5.7 GHz)
  * @NL80211_BAND_60GHZ: around 60 GHz band (58.32 - 64.80 GHz)
+ * @NUM_NL80211_BANDS: number of bands, avoid using this in userspace
+ *     since newer kernel versions may support more bands
  */
 enum nl80211_band {
 	NL80211_BAND_2GHZ,
 	NL80211_BAND_5GHZ,
 	NL80211_BAND_60GHZ,
+
+	NUM_NL80211_BANDS,
 };
 
 /**
